@@ -3,6 +3,6 @@ const productRoute = require("./product_route.js");
 
 module.exports = (app) =>
 {
-    app.use("/home", homeRoute);
+    app.use("/", homeRoute);
     app.use("/products", productRoute);
 }
