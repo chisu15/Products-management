@@ -20,6 +20,7 @@ if(buttonsStatus.length > 0) {
 // End Button Status
 
 // Form Search
+
 const formSearch = document.querySelector("#form-search");
 if(formSearch) {
   let url = new URL(window.location.href);
