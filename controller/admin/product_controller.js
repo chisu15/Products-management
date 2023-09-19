@@ -105,6 +105,7 @@ module.exports.changeMulti = async (req, res) => {
             position: position,
           }
         );
+        req.flash("success", `Đã đổi vị trí thành công ${ids.length} sản phẩm!`);
       }
       break;
     default:
