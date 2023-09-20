@@ -17,6 +17,7 @@ app.set("view engine", "pug");
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended: false}));
 
+database.connect();
 //  FLASH
 app.use(cookieParser("JHGJKLKLGFLJK"));
 app.use(session({ cookie: { maxAge: 60000 } }));
@@ -28,7 +29,6 @@ const routeAdmin = require("./routes/admin/index_route");
 
 routeAdmin(app);
 route(app)
-database.connect();
 
 app.locals.prefixAdmin = systemConfig.prefixAdmin;
 app.listen(port, ()=>

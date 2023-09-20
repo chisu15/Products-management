@@ -65,6 +65,14 @@ module.exports.changeStatus = async(req, res) =>
   res.redirect("back");
 }
 
+// [PATCH] /admin/products/change-status/:status/:id
+module.exports.changeStatus = async (req, res) => {
+  const status = req.params.status;
+  const id = req.params.id;
+  await Product.updateOne({ _id: id }, { status: status });
+  req.flash("success", "Cập nhật trạng thái thành công!");
+  res.redirect("back");
+};
 // [PATCH] /admin/products/change-multi
 module.exports.changeMulti = async (req, res) => {
   const type = req.body.type;
@@ -81,30 +89,29 @@ module.exports.changeMulti = async (req, res) => {
       break;
     case "delete-all":
       await Product.updateMany(
-        {_id: { $in: ids}},
+        { _id: { $in: ids } },
         {
           deleted: true,
-          deleteAt: new Date(),
+          deletedAt: new Date(),
         }
       );
       req.flash("success", `Đã xóa thành công ${ids.length} sản phẩm!`);
       break;
     case "change-position":
-      for(const item of ids)
-      {
+      for (const item of ids) {
         let [id, position] = item.split("-");
         position = parseInt(position);
 
-        await Product.updateOne(
-          {_id: id}, 
-          {position: position}
-        )
+        // console.log(id);
+        // console.log(position);
+
         await Product.updateOne(
           { _id: id },
           {
             position: position,
           }
         );
+
         req.flash("success", `Đã đổi vị trí thành công ${ids.length} sản phẩm!`);
       }
       break;
@@ -114,6 +121,7 @@ module.exports.changeMulti = async (req, res) => {
 
   res.redirect("back");
 };
+
 
 //  [DELETE]  admin/products/delete/:id
 module.exports.deleteItem = async(req, res) => {
@@ -127,7 +135,7 @@ module.exports.deleteItem = async(req, res) => {
 }
 
 // [GET] /admin/product/create
-module.exports.createPost = (req, res) => 
+module.exports.create = (req, res) => 
 {
   res.render("admin/pages/products/create",
   {
@@ -138,6 +146,7 @@ module.exports.createPost = (req, res) =>
 // [POST] /admin/products/create
 module.exports.createPost = async (req, res) => 
 {
+  console.log(req.file);
   req.body.price = parseInt(req.body.price);
   req.body.discountPercentage = parseInt(req.body.discountPercentage);
   req.body.stock = parseInt(req.body.stock);
@@ -150,9 +159,11 @@ module.exports.createPost = async (req, res) =>
   {
     req.body.position = parseInt(req.body.position);
   }
+  req.body.thumbnail = `/uploads/${req.file.filename}`;
 
   const product = new Product(req.body);
   await product.save();
 
   res.redirect(`${systemConfig.prefixAdmin}/products`);
 }
+

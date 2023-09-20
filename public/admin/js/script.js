@@ -1,13 +1,13 @@
 // Button Status
 const buttonsStatus = document.querySelectorAll("[button-status]");
-if(buttonsStatus.length > 0) {
+if (buttonsStatus.length > 0) {
   let url = new URL(window.location.href);
 
-  buttonsStatus.forEach(button => {
+  buttonsStatus.forEach((button) => {
     button.addEventListener("click", () => {
       const status = button.getAttribute("button-status");
 
-      if(status) {
+      if (status) {
         url.searchParams.set("status", status);
       } else {
         url.searchParams.delete("status");
@@ -20,16 +20,15 @@ if(buttonsStatus.length > 0) {
 // End Button Status
 
 // Form Search
-
 const formSearch = document.querySelector("#form-search");
-if(formSearch) {
+if (formSearch) {
   let url = new URL(window.location.href);
 
   formSearch.addEventListener("submit", (e) => {
     e.preventDefault();
     const keyword = e.target.elements.keyword.value;
 
-    if(keyword) {
+    if (keyword) {
       url.searchParams.set("keyword", keyword);
     } else {
       url.searchParams.delete("keyword");
@@ -40,14 +39,12 @@ if(formSearch) {
 }
 // End Form Search
 
-// End Form Search
-
 // Pagination
 const buttonsPagination = document.querySelectorAll("[button-pagination]");
-if(buttonsPagination) {
+if (buttonsPagination) {
   let url = new URL(window.location.href);
 
-  buttonsPagination.forEach(button => {
+  buttonsPagination.forEach((button) => {
     button.addEventListener("click", () => {
       const page = button.getAttribute("button-pagination");
 
@@ -58,6 +55,7 @@ if(buttonsPagination) {
   });
 }
 // End Pagination
+
 // Checkbox Multi
 const checkboxMulti = document.querySelector("[checkbox-multi]");
 if (checkboxMulti) {
@@ -102,22 +100,33 @@ if (formChangeMulti) {
     const inputsChecked = checkboxMulti.querySelectorAll(
       "input[name='id']:checked"
     );
+
     const typeChange = e.target.elements.type.value;
 
-    if(typeChange == "delete-all") {
+    if (typeChange == "delete-all") {
       const isConfirm = confirm("Bạn có chắc muốn xóa những sản phẩm này?");
 
-      if(!isConfirm) {
+      if (!isConfirm) {
         return;
       }
     }
-    if(inputsChecked.length > 0) {
+
+    if (inputsChecked.length > 0) {
       let ids = [];
       const inputIds = formChangeMulti.querySelector("input[name='ids']");
 
-      inputsChecked.forEach(input => {
+      inputsChecked.forEach((input) => {
         const id = input.value;
-        ids.push(id);
+
+        if (typeChange == "change-position") {
+          const position = input
+            .closest("tr")
+            .querySelector("input[name='position']").value;
+
+          ids.push(`${id}-${position}`);
+        } else {
+          ids.push(id);
+        }
       });
 
       inputIds.value = ids.join(", ");
@@ -145,3 +154,18 @@ if(showAlert) {
   });
 }
 // End Show Alert
+
+// Upload Image
+const uploadImage = document.querySelector("[upload-image]");
+if(uploadImage) {
+  const uploadImageInput = document.querySelector("[upload-image-input]");
+  const uploadImagePreview = document.querySelector("[upload-image-preview]");
+
+  uploadImageInput.addEventListener("change", (e) => {
+    const file = e.target.files[0];
+    if(file) {
+      uploadImagePreview.src = URL.createObjectURL(file);
+    }
+  });
+}
+// End Upload Image

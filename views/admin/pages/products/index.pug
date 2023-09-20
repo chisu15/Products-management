@@ -23,7 +23,7 @@ block main
             +form-change-multi(`${prefixAdmin}/products/change-multi?_method=PATCH`)
           .col-4 
             a(
-              href= `${prefixAdmin}/products/create`
+              href=`${prefixAdmin}/products/create`
               class="bth btn-outline-success"
             ) + Thêm mới
 
@@ -95,7 +95,6 @@ block main
                     data-id=item.id 
                   ) Xóa
 
-
   +pagination(pagination)
 
   form(
@@ -107,8 +106,8 @@ block main
   form(
     action=""
     method="POST"
-    id="form-deleted-item"
-    data-path=`${prefixAdmin}/products/deleted`
+    id="form-delete-item"
+    data-path=`${prefixAdmin}/products/delete`
   )
 
 
